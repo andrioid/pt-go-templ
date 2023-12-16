@@ -1,13 +1,12 @@
 package todo
 
-type TodoRepo struct {
-	Items []string
+var items []string = make([]string, 0)
+
+func GetItems() []string {
+	return items
 }
 
-func (tr *TodoRepo) GetItems() []string {
-	return tr.Items
-}
-
-func (tr *TodoRepo) AddItem(newItem string) {
-	tr.Items = append(tr.Items, newItem)
+func AddItem(newItem string) []string {
+	items = append(items, newItem)
+	return items
 }

@@ -13,3 +13,12 @@ My hope is that this is a viable web stack, where I can put all of the domain lo
 - Templ
 - HTMX
 - Repository pattern
+
+## Tasks
+
+- [ ] Evaluate various database layers
+  - [ ] Ent?
+  - [ ] Gorm?
+  - [ ] Manual?
+- [ ] When HTMX isn't enough?
+  - [ ] Hyperscript?

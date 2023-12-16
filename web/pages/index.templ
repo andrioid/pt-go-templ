@@ -1,12 +1,15 @@
 package pages
 
 import "app/web/layouts"
+import "app/repos/todo"
 
-templ RootIndexPage(list []string) {
+var list []string = []string{"test from templ"}
+
+templ RootIndexPage() {
 	@layouts.RootLayout() {
 		<section id="root">
 			<h1 class="text-4xl">Root index</h1>
-			@Counts(list)
+			@Counts(todo.GetItems())
 		</section>
 	}
 }
