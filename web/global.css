@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+
+input {
+    @apply h-10 rounded-md border
+}
+
+@tailwind utilities;

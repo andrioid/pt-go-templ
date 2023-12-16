@@ -1,0 +1,23 @@
+package pages
+
+import "app/web/layouts"
+
+templ RootIndexPage(list []string) {
+	@layouts.RootLayout() {
+		<section id="root">
+			<h1 class="text-4xl">Root index</h1>
+			@Counts(list)
+		</section>
+	}
+}
+
+templ Counts(list []string) {
+	<form id="listform" method="POST" hx-post="/" hx-select="#listform" hx-swap="outerHTML">
+		<input class="" type="text" name="add-item"/><button type="submit">Do it!</button>
+		<ul id="todo-items" class="list-disc pl-5">
+			for _, item := range list {
+				<li class="uppercase">{ item }</li>
+			}
+		</ul>
+	</form>
+}
