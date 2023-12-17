@@ -83,7 +83,7 @@ func TodoIndex() templ.Component {
 	})
 }
 
-func CountForm(list []string) templ.Component {
+func CountForm(list []Todo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -96,7 +96,7 @@ func CountForm(list []string) templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"listform\" class=\"bg-white rounded-md p-6 shadow-md\"><form method=\"POST\" hx-post=\"/\" hx-target=\"#todo-items\" hx-swap=\"outerHTML\" hx-on::after-request=\"this.reset()\"><div class=\"mb-4\"><input class=\"\" type=\"text\" name=\"add-item\"> <button class=\"ml-2\" type=\"submit\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"listform\" class=\"bg-white rounded-md p-6 shadow-md\"><form method=\"POST\" hx-post=\"/\" hx-target=\"#todo-items\" hx-swap=\"beforeend\" hx-on::after-request=\"this.reset()\"><div class=\"mb-4\"><input class=\"\" type=\"text\" name=\"add-item\"> <button class=\"ml-2\" type=\"submit\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -124,7 +124,7 @@ func CountForm(list []string) templ.Component {
 	})
 }
 
-func Items(list []string) templ.Component {
+func Items(list []Todo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -158,7 +158,7 @@ func Items(list []string) templ.Component {
 	})
 }
 
-func TodoItem(item string) templ.Component {
+func TodoItem(item Todo) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -175,7 +175,7 @@ func TodoItem(item string) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		var templ_7745c5c3_Var9 string = item
+		var templ_7745c5c3_Var9 string = string(item)
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

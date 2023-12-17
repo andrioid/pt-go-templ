@@ -2,14 +2,16 @@ package todo
 
 import "net/http"
 
-var items []string = make([]string, 0)
+type Todo string
 
-func GetItems() []string {
+var items []Todo = make([]Todo, 0)
+
+func GetItems() []Todo {
 	return items
 }
 
-func AddItem(newItem string) []string {
-	items = append(items, newItem)
+func AddItem(newItem string) []Todo {
+	items = append(items, Todo(newItem))
 	return items
 }
 
@@ -24,9 +26,11 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == http.MethodPost {
-		list := AddItem(r.FormValue("add-item"))
-		component := Items(list)
+		AddItem(r.FormValue("add-item"))
+		item := Todo(r.FormValue("add-item"))
+		component := TodoItem(item)
 		component.Render(r.Context(), w)
+
 		return
 	}
 }

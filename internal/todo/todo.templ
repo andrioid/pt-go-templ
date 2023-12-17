@@ -13,9 +13,9 @@ templ TodoIndex() {
 	}
 }
 
-templ CountForm(list []string) {
+templ CountForm(list []Todo) {
 	<div id="listform" class="bg-white rounded-md p-6 shadow-md">
-		<form method="POST" hx-post="/" hx-target="#todo-items" hx-swap="outerHTML" hx-on::after-request="this.reset()">
+		<form method="POST" hx-post="/" hx-target="#todo-items" hx-swap="beforeend" hx-on::after-request="this.reset()">
 			<div class="mb-4">
 				<input class="" type="text" name="add-item"/>
 				<button class="ml-2" type="submit">Do it now!</button>
@@ -25,7 +25,7 @@ templ CountForm(list []string) {
 	</div>
 }
 
-templ Items(list []string) {
+templ Items(list []Todo) {
 	<div id="todo-items" class="grid grid-cols-4 gap-2">
 		for _, item := range list {
 			@TodoItem(item)
@@ -33,8 +33,8 @@ templ Items(list []string) {
 	</div>
 }
 
-templ TodoItem(item string) {
+templ TodoItem(item Todo) {
 	<div class="rounded-md p-6 bg-pink-100 shadow-md">
-		{ item }
+		{ string(item) }
 	</div>
 }
