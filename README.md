@@ -10,15 +10,29 @@ My hope is that this is a viable web stack, where I can put all of the domain lo
 
 - Go
 - Tailwind
-- Templ
+- [Templ](https://templ.guide)
 - HTMX
 - Repository pattern
+- SQLite
+
+## Tech evaluations
+
+- [x] Evaluate routers
+  - [x] ~echo~: Seems to work fine, nothing special though
+  - [x] ServeMux: Getting better in Go 1.22 - trying to keep this minimal
+- [x] Evaluate various database layers
+  - [x] ~Ent~: If was building an enterprise app, yes
+  - [x] ~Gorm~: Good/Bad: 80/20. The bad is too high.
+  - [x] Manual: Works, minimal. We're going with minimal.
+- [ ] When HTMX isn't enough?
+  - [ ] Hyperscript?
 
 ## Tasks
 
-- [ ] Evaluate various database layers
-  - [ ] Ent?
-  - [ ] Gorm?
-  - [ ] Manual?
-- [ ] When HTMX isn't enough?
-  - [ ] Hyperscript?
+- Play more with templ
+- Add SQLite
+- Read items from database
+- Update items in database
+- Serve /public for CSS
+- Embed assets into binary
+- Experiment with SQLite, maybe Gorm

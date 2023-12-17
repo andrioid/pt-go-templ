@@ -1,0 +1,40 @@
+package todo
+
+import "app/web/layouts"
+
+templ TodoIndex() {
+	@layouts.RootLayout() {
+		@layouts.PageLayout() {
+			<section id="root">
+				<h1 class="text-4xl mb-4">Root index</h1>
+				@CountForm(GetItems())
+			</section>
+		}
+	}
+}
+
+templ CountForm(list []string) {
+	<div id="listform" class="bg-white rounded-md p-6 shadow-md">
+		<form method="POST" hx-post="/" hx-target="#todo-items" hx-swap="outerHTML" hx-on::after-request="this.reset()">
+			<div class="mb-4">
+				<input class="" type="text" name="add-item"/>
+				<button class="ml-2" type="submit">Do it now!</button>
+			</div>
+			@Items(list)
+		</form>
+	</div>
+}
+
+templ Items(list []string) {
+	<div id="todo-items" class="grid grid-cols-4 gap-2">
+		for _, item := range list {
+			@TodoItem(item)
+		}
+	</div>
+}
+
+templ TodoItem(item string) {
+	<div class="rounded-md p-6 bg-pink-100 shadow-md">
+		{ item }
+	</div>
+}

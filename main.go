@@ -1,11 +1,11 @@
 package main
 
 import (
-	"app/repos/todo"
-	"app/web/pages"
+	"app/internal/todo"
 	"database/sql"
+	"log"
+	"net/http"
 
-	"github.com/labstack/echo/v4"
 	_ "github.com/mattn/go-sqlite3"
 )
 
@@ -19,23 +19,17 @@ func main() {
 	}
 	DB = db
 
-	e := echo.New()
-	// TODO: Serve /public for CSS
-	// TODO: Embed assets into binary
-	// TODO: Experiment with SQLite, maybe Gorm
-	// TODO: Live reload with Air maybe
+	mux := http.NewServeMux()
+	fs := http.FileServer(http.Dir("./web/public"))
 
-	e.GET("/", func(c echo.Context) error {
-		return pages.RootIndexPage().Render(c.Request().Context(), c.Response().Writer)
-		//return Hello("hello").Render(c.Request().Context(), c.Response().Writer)
-	})
-	e.POST("/", func(c echo.Context) error {
-		ctx := c.Request().Context()
-		list := todo.AddItem(c.FormValue("add-item"))
+	// Note to self: Routing in Go Stdlib is awkward :(
+	mux.HandleFunc("/", todo.Handler)
 
-		c.Response().Header().Set("Content-Type", "text/html")
-		return pages.Counts(list).Render(ctx, c.Response().Writer)
-	})
-	e.Static("/", "./web/public")
-	e.Logger.Fatal(e.Start(":1323"))
+	mux.Handle("/public/", http.StripPrefix("/public/", fs))
+	log.Print("Listening on http://localhost:3000")
+	err = http.ListenAndServe(":3000", mux)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 }

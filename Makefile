@@ -1,6 +1,6 @@
 BINARY_NAME=main
 
-build: $(wildcard *.go) $(wildcard *.templ)
+build: $(wildcard *.go) $(wildcard *.templ) tailwind
 	go mod tidy
 	templ generate
 	go build -o ${BINARY_NAME} ./
@@ -14,3 +14,6 @@ tailwind:
 
 run: tailwind build
 	./main
+
+watch:
+	air -c .air.toml

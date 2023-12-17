@@ -2,7 +2,11 @@
 @tailwind components;
 
 input {
-    @apply h-10 rounded-md border
+    @apply h-10 rounded-md border px-2
+}
+
+button {
+    @apply rounded-md border h-10 py-2 px-4
 }
 
 @tailwind utilities;
