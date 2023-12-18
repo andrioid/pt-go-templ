@@ -1,18 +1,44 @@
 package todo
 
-import "net/http"
+import (
+	"app/internal/db"
+	"net/http"
+)
 
-type Todo string
+type TodoModel struct {
+	id       int64
+	name     string
+	finished bool
+}
 
-var items []Todo = make([]Todo, 0)
+func GetItems() []TodoModel {
+	rows, err := db.DB.Query("SELECT id, name, finished FROM todo")
+	if err != nil {
+		panic(err)
+	}
+	var items []TodoModel
 
-func GetItems() []Todo {
+	for rows.Next() {
+		var item TodoModel
+		rows.Scan(&item.id, &item.name, &item.finished)
+		items = append(items, item)
+	}
 	return items
 }
 
-func AddItem(newItem string) []Todo {
-	items = append(items, Todo(newItem))
-	return items
+func AddItem(newItem string) (TodoModel, error) {
+	res, err := db.DB.Exec("INSERT INTO todo (name) VALUES (?)", newItem)
+	if err != nil {
+		return TodoModel{}, err
+	}
+	id, err := res.LastInsertId()
+	if err != nil {
+		return TodoModel{}, err
+	}
+	return TodoModel{
+		id:   id,
+		name: newItem,
+	}, nil
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {
@@ -26,8 +52,10 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	if r.Method == http.MethodPost {
-		AddItem(r.FormValue("add-item"))
-		item := Todo(r.FormValue("add-item"))
+		item, err := AddItem(r.FormValue("add-item"))
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+		}
 		component := TodoItem(item)
 		component.Render(r.Context(), w)
 

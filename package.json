@@ -1,11 +1,11 @@
 {
   "name": "web",
   "version": "1.0.0",
-  "description": "",
+  "description": "Note: Strictly used for dev tools. Not production",
   "main": "index.js",
   "private": true,
   "scripts": {
-    "watch:go": "nodemon -e go --exec 'go build . && ./app' --signal SIGTERM",
+    "watch:go": "nodemon -e go,sql --exec 'go build . && ./app' --signal SIGTERM",
     "watch:css": "tailwindcss -i ./web/global.css -o ./web/public/generated.css --watch",
     "watch:templ": "templ generate --watch",
     "watch:browser": "browser-sync start --port 3001 --proxy 'localhost:3000' --files ./app",

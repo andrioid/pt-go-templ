@@ -36,3 +36,8 @@ My hope is that this is a viable web stack, where I can put all of the domain lo
 - Serve /public for CSS
 - Embed assets into binary
 - Experiment with SQLite, maybe Gorm
+
+## Global install deps
+
+- go install github.com/pressly/goose/v3/cmd/goose@latest
+- go install github.com/a-h/templ/cmd/templ@latest
