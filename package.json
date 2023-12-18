@@ -1,0 +1,23 @@
+{
+  "name": "web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "watch:go": "nodemon -e go --exec 'go build . && ./app' --signal SIGTERM",
+    "watch:css": "tailwindcss -i ./web/global.css -o ./web/public/generated.css --watch",
+    "watch:templ": "templ generate --watch",
+    "watch:browser": "browser-sync start --port 3001 --proxy 'localhost:3000' --files ./app",
+    "dev": "concurrently npm:watch:* --kill-others",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "browser-sync": "^2.29.3",
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.0.2",
+    "tailwindcss": "^3.3.6"
+  }
+}
