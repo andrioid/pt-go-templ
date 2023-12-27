@@ -3,20 +3,23 @@ package main
 import (
 	_ "app/internal/db"
 	"app/internal/todo"
+	"app/internal/user"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	mux := http.NewServeMux()
+	router := mux.NewRouter()
 	fs := http.FileServer(http.Dir("./web/public"))
 
-	// Note to self: Routing in Go Stdlib is awkward :(
-	mux.HandleFunc("/", todo.Handler)
+	todo.RegisterRoutes(router.PathPrefix("/todo").Subrouter())
+	user.RegisterRoutes(router.PathPrefix("/user").Subrouter())
 
-	mux.Handle("/public/", http.StripPrefix("/public/", fs))
+	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", fs))
 	log.Print("Listening on http://localhost:3000")
-	err := http.ListenAndServe(":3000", mux)
+	err := http.ListenAndServe(":3000", router)
 	if err != nil {
 		log.Fatal(err)
 	}

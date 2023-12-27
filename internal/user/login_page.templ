@@ -1,0 +1,35 @@
+package user
+
+import "app/web/layouts"
+
+templ LoginPage(loginError error) {
+	@layouts.RootLayout() {
+		<section>
+			<h1>Login page</h1>
+			@layouts.PageLayout() {
+				<div class="bg-white p-6 rounded-md">
+					@LoginForm(loginError)
+				</div>
+			}
+		</section>
+	}
+}
+
+templ LoginForm(loginError error) {
+	<form method="POST" hx-post hx-swap="outerHTML">
+		<fieldset class="mb-2">
+			<label>User</label>
+			<input name="user" type="text"/>
+		</fieldset>
+		<fieldset class="mb-4">
+			<label>Password</label>
+			<input name="password" type="password"/>
+		</fieldset>
+		<div id="login-button">
+			if loginError != nil {
+				<div class="text-red-700 mb-4">{ loginError.Error() }</div>
+			}
+			<button type="submit">Login button</button>
+		</div>
+	</form>
+}

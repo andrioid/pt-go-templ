@@ -96,7 +96,7 @@ func CountForm(list []TodoModel) templ.Component {
 			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"listform\" class=\"bg-white rounded-md p-6 shadow-md\"><form method=\"POST\" hx-post=\"/\" hx-target=\"#todo-items\" hx-swap=\"beforeend\" hx-on::after-request=\"this.reset()\"><div class=\"mb-4\"><input class=\"\" type=\"text\" name=\"add-item\"> <button class=\"ml-2\" type=\"submit\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div id=\"listform\" class=\"bg-white rounded-md p-6 shadow-md\"><form method=\"POST\" hx-post hx-target=\"#todo-items\" hx-swap=\"beforeend\" hx-on::after-request=\"this.reset()\"><div class=\"mb-4\"><input class=\"\" type=\"text\" name=\"add-item\"> <button class=\"ml-2\" type=\"submit\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -171,7 +171,7 @@ func TodoItem(item TodoModel) templ.Component {
 			templ_7745c5c3_Var8 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"rounded-md p-6 bg-pink-100 shadow-md flex justify-between\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"rounded-md p-6 bg-violet-100 shadow-md flex justify-between\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -15,7 +15,7 @@ templ TodoIndex() {
 
 templ CountForm(list []TodoModel) {
 	<div id="listform" class="bg-white rounded-md p-6 shadow-md">
-		<form method="POST" hx-post="/" hx-target="#todo-items" hx-swap="beforeend" hx-on::after-request="this.reset()">
+		<form method="POST" hx-post hx-target="#todo-items" hx-swap="beforeend" hx-on::after-request="this.reset()">
 			<div class="mb-4">
 				<input class="" type="text" name="add-item"/>
 				<button class="ml-2" type="submit">Do it now!</button>
@@ -34,7 +34,7 @@ templ Items(list []TodoModel) {
 }
 
 templ TodoItem(item TodoModel) {
-	<div class="rounded-md p-6 bg-pink-100 shadow-md flex justify-between">
+	<div class="rounded-md p-6 bg-violet-100 shadow-md flex justify-between">
 		{ item.name }
 		<input type="checkbox" checked?={ item.finished }/>
 	</div>

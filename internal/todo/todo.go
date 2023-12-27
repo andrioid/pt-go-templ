@@ -2,7 +2,10 @@ package todo
 
 import (
 	"app/internal/db"
+	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 type TodoModel struct {
@@ -41,12 +44,13 @@ func AddItem(newItem string) (TodoModel, error) {
 	}, nil
 }
 
-func Handler(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path != "/" {
-		http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
-		return
-	}
-	if r.Method == http.MethodGet && r.URL.Path == "/" {
+func RootHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("todo handler called", r.URL)
+	// if r.URL.Path != "/" {
+	// 	http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
+	// 	return
+	// }
+	if r.Method == http.MethodGet {
 		component := TodoIndex()
 		component.Render(r.Context(), w)
 		return
@@ -61,4 +65,8 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 
 		return
 	}
+}
+
+func RegisterRoutes(r *mux.Router) {
+	r.HandleFunc("/", RootHandler)
 }

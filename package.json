@@ -8,7 +8,7 @@
     "watch:go": "nodemon -e go,sql --exec 'go build . && ./app' --signal SIGTERM",
     "watch:css": "tailwindcss -i ./web/global.css -o ./web/public/generated.css --watch",
     "watch:templ": "templ generate --watch",
-    "watch:browser": "browser-sync start --port 3001 --proxy 'localhost:3000' --files ./app",
+    "watch:browser": "browser-sync start --port 3001 --no-ui --proxy 'localhost:3000' --files ./app",
     "dev": "concurrently npm:watch:* --kill-others",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

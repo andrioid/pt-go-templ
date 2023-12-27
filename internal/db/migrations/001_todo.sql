@@ -4,3 +4,6 @@ CREATE TABLE todo (
 	name TEXT NOT NULL,
 	finished INTEGER DEFAULT 0
 );
+
+-- +goose Down
+DROP TABLE todo

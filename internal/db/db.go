@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"embed"
 	"fmt"
+	"log"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/pressly/goose/v3"
@@ -23,7 +24,7 @@ func init() {
 	fmt.Println("Database initialising and migrating")
 	db, err := sql.Open("sqlite3", DB_FILE)
 	if err != nil {
-		panic("failed to connect database")
+		log.Fatal("failed to connect database", err)
 	}
 	// Migrate
 	DB = db
@@ -34,7 +35,7 @@ func init() {
 	}
 
 	if err := goose.Up(db, "migrations"); err != nil {
-		panic(err)
+		log.Fatal("Migrations failed:\n\n", err)
 	}
 
 }
