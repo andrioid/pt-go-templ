@@ -15,6 +15,15 @@ CREATE TABLE user_token (
 	FOREIGN KEY(user_id) REFERENCES user(id)	
 );
 
+CREATE TABLE sessions (
+	token TEXT PRIMARY KEY,
+	data BLOB NOT NULL,
+	expiry REAL NOT NULL
+);
+
+CREATE INDEX sessions_expiry_idx ON sessions(expiry);
+
 -- +goose Down
 DROP TABLE user;
 DROP TABLE user_token;
+DROP TABLE sessions;

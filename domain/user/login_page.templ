@@ -2,10 +2,18 @@ package user
 
 import "app/web/layouts"
 
+import "app/internal/session"
+
+func GetUserId(ctx context.Context) string {
+	userId := session.Manager.GetString(ctx, "user_id")
+	return userId
+}
+
 templ LoginPage(loginError error) {
 	@layouts.RootLayout() {
 		<section>
 			<h1>Login page</h1>
+			{ GetUserId(ctx) }
 			@layouts.PageLayout() {
 				<div class="bg-white p-6 rounded-md">
 					@LoginForm(loginError)

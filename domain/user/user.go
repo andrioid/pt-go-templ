@@ -1,11 +1,12 @@
 package user
 
 import (
+	"app/internal/session"
 	"errors"
-	"fmt"
 	"log"
 	"net/http"
 
+	"github.com/a-h/templ"
 	"github.com/gorilla/mux"
 )
 
@@ -19,15 +20,11 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 func LoginFormHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO: Check referrer
 	// TODO: Check user
-	r.ParseForm()
 	user := r.FormValue("user")
 	password := r.FormValue("password")
-	fmt.Printf("%v\n", r.Form)
-	log.Printf("user: '%s', pass: '%s'", user, password)
-	w.Header().Add("Content-Type", "text/html")
 	var err error
 	if user == "admin" && password == "password" {
-		log.Println("Login good")
+		session.Manager.Put(r.Context(), "user_id", "123")
 		// "secure" defaults, lol
 		w.Header().Add("HX-Redirect", "/") // Tell HTMX to redirect
 
@@ -39,10 +36,12 @@ func LoginFormHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	component := LoginForm(err)
+
 	component.Render(r.Context(), w)
 }
 
 func RegisterRoutes(r *mux.Router) {
-	r.HandleFunc("/", RootHandler).Methods("GET")
+	r.Handle("/", templ.Handler(LoginPage(nil))).Methods("GET")
+	//r.HandleFunc("/", RootHandler).Methods("GET")
 	r.HandleFunc("/", LoginFormHandler).Methods("POST")
 }
