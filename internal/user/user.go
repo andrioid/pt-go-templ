@@ -31,7 +31,7 @@ func LoginFormHandler(w http.ResponseWriter, r *http.Request) {
 		// "secure" defaults, lol
 		w.Header().Add("HX-Redirect", "/") // Tell HTMX to redirect
 
-		http.Redirect(w, r, "/user/", http.StatusFound)
+		//http.Redirect(w, r, "/user/", http.StatusFound)
 	} else {
 		log.Println("Login bad", user, password)
 		err = errors.New("invalid login")
