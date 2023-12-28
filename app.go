@@ -7,6 +7,7 @@ import (
 	"app/internal/session"
 	"log"
 	"net/http"
+	"strings"
 
 	"app/web/pages"
 
@@ -16,14 +17,24 @@ import (
 
 func main() {
 	router := mux.NewRouter()
-	fs := http.FileServer(http.Dir("./web/public"))
+	fs := http.FileServer(http.Dir("./web/public")) // TODO: Embed public
+	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", fs))
 	session.InitSessionManager()
+	// router.Use(user.AuthMiddleWare([]string{
+	// 	"/user/login",
+	// 	"/public",
+	// }))
+	router.Use(user.RequireAuthForPathMiddleware(func(urlPath string) bool {
+		if strings.HasPrefix(urlPath, "/todo") {
+			return true
+		}
+		return false
+	}))
 
 	todo.RegisterRoutes(router.PathPrefix("/todo").Subrouter())
 	user.RegisterRoutes(router.PathPrefix("/user").Subrouter())
 	router.Handle("/", templ.Handler(pages.IndexPage()))
 
-	router.PathPrefix("/public/").Handler(http.StripPrefix("/public/", fs))
 	log.Print("Listening on http://localhost:3000")
 	//err := http.ListenAndServe(":3000", router)
 	err := http.ListenAndServe(":3000", session.Manager.LoadAndSave(router))

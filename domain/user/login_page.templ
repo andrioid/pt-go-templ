@@ -9,14 +9,14 @@ func GetUserId(ctx context.Context) string {
 	return userId
 }
 
-templ LoginPage(loginError error) {
+templ LoginPage() {
 	@layouts.RootLayout() {
 		<section>
 			<h1>Login page</h1>
 			{ GetUserId(ctx) }
 			@layouts.PageLayout() {
 				<div class="bg-white p-6 rounded-md">
-					@LoginForm(loginError)
+					@LoginForm(nil)
 				</div>
 			}
 		</section>

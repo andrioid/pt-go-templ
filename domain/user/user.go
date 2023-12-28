@@ -1,47 +1,81 @@
 package user
 
 import (
+	"app/internal/db"
 	"app/internal/session"
-	"errors"
+	"context"
+	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/a-h/templ"
 	"github.com/gorilla/mux"
 )
 
-// TODO: Login page
+type UserModel struct {
+	ID         int64
+	Email      string
+	IsAdmin    bool
+	IsVerified bool
+	// Private. There should be no reason for reading outside user
+	passwd   string
+	hashType string
+}
 
-func RootHandler(w http.ResponseWriter, r *http.Request) {
-	component := LoginPage(nil)
-	component.Render(r.Context(), w)
+func GetUser(ctx context.Context, email string) (UserModel, error) {
+	user := UserModel{}
+	res := db.DB.QueryRowContext(ctx, "SELECT id, email, passwd, hash_type, is_email_verified, is_admin FROM user WHERE email=?", email)
+	err := res.Scan(&user.ID, &user.Email, &user.passwd, &user.hashType, &user.IsVerified, &user.IsAdmin)
+	if err != nil {
+		return user, err
+	}
+	return user, nil
 }
 
 func LoginFormHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("wat")
 	// TODO: Check referrer
 	// TODO: Check user
 	user := r.FormValue("user")
 	password := r.FormValue("password")
-	var err error
-	if user == "admin" && password == "password" {
-		session.Manager.Put(r.Context(), "user_id", "123")
-		// "secure" defaults, lol
-		w.Header().Add("HX-Redirect", "/") // Tell HTMX to redirect
-
-		//http.Redirect(w, r, "/user/", http.StatusFound)
-	} else {
-		log.Println("Login bad", user, password)
-		err = errors.New("invalid login")
+	err := Login(r.Context(), user, password)
+	if err == nil {
+		// Login succeded, redirecting
+		w.Header().Add("HX-Redirect", "/") // HTMX specific
+		return
 	}
 
-	w.WriteHeader(http.StatusOK)
 	component := LoginForm(err)
-
 	component.Render(r.Context(), w)
 }
 
-func RegisterRoutes(r *mux.Router) {
-	r.Handle("/", templ.Handler(LoginPage(nil))).Methods("GET")
-	//r.HandleFunc("/", RootHandler).Methods("GET")
-	r.HandleFunc("/", LoginFormHandler).Methods("POST")
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	if err := Logout(r.Context()); err != nil {
+		log.Println(err)
+		http.Error(w, "Failed to log out", http.StatusInternalServerError)
+		return
+	}
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
+func RequireAuthForPathMiddleware(requireAuthFunc func(string) bool) mux.MiddlewareFunc {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			// TODO: Check session
+
+			if requireAuthFunc(r.URL.Path) && !IsLoggedIn(r.Context()) {
+				referer := r.URL.Path
+				http.Redirect(w, r, fmt.Sprintf("/user/login/?ref=%s", referer), http.StatusFound)
+				return
+			}
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
+func IsLoggedIn(ctx context.Context) bool {
+	if session.Manager == nil {
+		return false
+	}
+	userId := session.Manager.GetString(ctx, "user_id")
+	return userId != "" // False if empty
 }
